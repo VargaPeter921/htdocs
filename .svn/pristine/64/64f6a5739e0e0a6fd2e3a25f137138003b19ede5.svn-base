@@ -1,0 +1,97 @@
+<?php
+	/*$_SESSION['screen_size'] = array();
+	$_SESSION['screen_size']['width'] = intval($_POST['width']);
+	$_SESSION['screen_size']['height'] = intval($_POST['height']);*/
+	$pages = "../pages/";
+	$styles = "../styles/";
+	$scripts = "../scripts/";
+	$images = "../images/";
+	$d = "../";
+
+	require $pages.'header.php';
+?>
+<body onload="getSize()">
+
+<form method='post' id='form_size'>
+	<input type='hidden' name='width' id='inp_width'/>
+	<input type='hidden' name='height' id='inp_height'/>
+</form>
+
+<?php
+	require $pages.'logo.php';
+	require $scripts.'functions.php';
+?>
+
+<div id="filters">
+	Szűrők
+</div>
+<div>
+	<ul class="sidenav">
+		<li>
+			<a href="#">Kategóriák</a>
+		</li>
+		<li>
+			<a href="#">Perifériák</a>
+			<ul>
+				<li>
+					<a href="#">Egér</a>
+				</li>
+				<li>
+					<a href="#">Billentyűzet</a>
+				</li>
+				<li>
+					<a href="#">Monitor</a>
+				</li>
+			</ul>	
+        </li>
+	</ul>
+</div>
+<div id="oldalak">
+	1 | 2 | 3 ... 10
+</div>
+
+<table id="boltTermekek">
+	<?php
+		$screenWidth = 1920;
+		$screenHeight = 1080;
+		
+		if(isset($_POST['recordSize']))
+		{
+			$screenHeight = $_POST['height'];
+			$screenWidth = $_POST['width'];
+		}
+		
+		//echo 'MAGASSÁG: '.$screenHeight.', osztott'.($screenHeight/320).', ';
+		
+		for ($x = 0; $x < (floor(($screenHeight-250)/320)); $x++)
+		{
+			echo '<tr>';
+			for ($i = 0; $i < (floor(($screenWidth)/233.75))-1; $i++)
+			{
+				$ret = termekLekeres();
+				echo '
+					<td>
+						<a href="#'.$ret[0].'"><div class="boltTermek">
+							<img class="hover center" src="'.$d.$ret[1].'" alt="">
+							<span class="boltTermekText">
+								'.$ret[3].'
+							</span>
+							<div class="termekCim">
+								'.$ret[0].'
+							</div>
+							<div class="termekAr">
+								'.$ret[2].' Ft
+							</div>
+						</div></a>
+					</td>
+					';
+			}
+			echo '</tr>';
+		}
+	?>
+</table>
+<?php
+	require $pages.'footer.php';
+?>
+</body>
+</html>

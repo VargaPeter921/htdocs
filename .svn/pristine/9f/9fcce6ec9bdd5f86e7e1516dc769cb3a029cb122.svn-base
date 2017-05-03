@@ -1,0 +1,90 @@
+<?php
+	if(substr($_SERVER['REQUEST_URI'], -7)[0] == 't')
+	{
+		try
+		{
+			$id = substr($_SERVER['REQUEST_URI'], -6);
+			$termek = DB::select('SELECT * FROM termeks WHERE id = ?', [$id]);
+			echo '<title>'.$termek[0]->cikknev.' - Ebox Informatika Kft</title>';
+
+			$pages = "pages/";
+			$styles = "styles/";
+			$scripts = "scripts/";
+			$images = "images/";
+			$d = "/";
+			
+			include $pages.'header.php';
+
+			?>
+			<div id="body">
+
+			<?php
+				//include $pages.'logo.php';
+				require $scripts.'functions.php';
+			?>
+
+			<div id="categories">
+				Kategóriák
+			</div>
+			<div id="oldalak">
+				<a href="/">Főoldal....</a>
+			</div>
+
+			<div id="termekBody">
+				<div id="termekKepek">
+					<div id="bigimages">
+						<div id="normal1">
+							<img src="images/topRightR3_04.png" alt=""/>
+						</div>	
+						
+						<div id="normal2">
+							<img src="images/topRightR3_04.png" alt=""/>
+						</div>	
+						
+						<div id="normal3">
+							<img src="images/topRightR3_04.png" alt=""/>
+						</div>
+					</div>
+
+					<div id="thumbs">
+						<a href="javascript: changeImage(1);"><img src="images/topRightR3_04.png" alt="" /></a>
+						<a href="javascript: changeImage(2);"><img src="images/topRightR3_04.png" alt="" /></a>
+						<a href="javascript: changeImage(3);"><img src="images/topRightR3_04.png" alt="" /></a>
+					</div>
+				</div>
+				<div id="termekLeiras">
+				<p id="termekesCim">TRUST GXT280 BILLENTYŰZET</p>
+
+				LEÍRÁS SPECIFIKÁCIÓ
+				Típus: Billentyűzet
+				Billentyűzet csatlakoztatása: USB
+				Vezeték nélküli: Nem
+				Multimédia billentyűzet: Igen
+				Háttérvilágítás: Van
+				Mechanikus: Nem
+				
+				</div>
+				<div id="termekRendeles">
+				10.490 Ft
+				Bruttó: 8260 Ft
+				Kosárba
+				Kedvencekhez
+				Raktáron
+				Átvétel:
+				Szállítás:
+				
+				</div>
+				<div id="termekHasonlo">
+					<p id="termekesCim">Hasonló Termékek</p>
+				
+				</div>
+			</div>
+			<?php
+				require $pages.'footer.php';
+		}
+		catch (Exception $e)
+		{
+			echo $e->getMessage();
+		}
+	}
+?>

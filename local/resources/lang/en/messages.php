@@ -1,0 +1,25 @@
+<?php
+
+return array (
+  'login' => 'Bejelentkezés',
+  'home' => 'Kezdőlap',
+  'about' => 'Rólunk',
+  'contact' => 'Kapcsolat',
+  'yourname' => 'Neved',
+  'submit' => 'Beküldés',
+  'mail' => 'Email Cím',
+  'mailText' => 'Üzenet',
+  'pageNotFound' => 'Az oldal nem található',
+  'back' => 'Vissza',
+  'notfoundTitle' => 'Az oldal nem található',
+  'dashboard' => 'Vezérlőpult',
+  'organisationOverview' => 'Szervezet áttekintés',
+  'moreInfo' => 'Bővebb infó',
+  'addProduct' => 'Termék hozzáadás',
+  'close' => 'Bezárás',
+  'customLinks' => 'Egyedi link',
+  'modules' => 'Modulok',
+  'label' => 'Címke',
+  'icon' => 'Ikon',
+  'NewOrder' => 'Új Megrendelés',
+);

@@ -1,0 +1,107 @@
+<?php
+	function termekLekeres()
+	{
+		$dbUser = "root";
+		$dbPass = "";
+		$dbName = "eboxbolt";
+		
+		try 
+		{
+			$db = new PDO('mysql:host=localhost;dbname='.$dbName.';charset=utf8mb4', $dbUser, $dbPass);
+		}
+		catch(PDOException $ex)
+		{
+			$dbUser = "eboxpchu";
+			$dbPass = "9iPHl3cu57";
+			$dbName = "eboxpchu_justabit";
+			$db = new PDO('mysql:host=localhost;dbname='.$dbName.';charset=utf8mb4', $dbUser, $dbPass);
+		}
+		
+		$termek = DB::select('SELECT * FROM termeks WHERE webmegjel = 1 ORDER BY RAND() LIMIT 1');
+		$cikkNev = $termek[0]->cikknev;
+		$megj = $termek[0]->megj;
+		$id = $termek[0]->ID;
+		
+		$termek = DB::select('SELECT * FROM termekkep WHERE termekID = "'.$id.'" ORDER BY RAND() LIMIT 1');
+		if ($termek <> false)
+		{
+			$termekkep = $termek[0]->kepEleres;
+		}
+		else
+		{
+			$termekkep = "images\default.jpg";
+		}
+		
+		$termek = DB::select('SELECT * FROM termekAr WHERE termekID = '.$id.' ORDER BY RAND() LIMIT 1');
+		if ($termek <> false)
+		{
+			$termekar = $termek[0]->normalAr;
+		}
+		else
+		{
+			$termekar = 0;
+		}
+		
+		return array ($cikkNev, $termekkep, $termekar, $megj, $id);
+	}
+	
+	function kategoriaLekeres()
+	{
+		$dbUser = "root";
+		$dbPass = "";
+		$dbName = "eboxbolt";
+		
+		try 
+		{
+			$db = new PDO('mysql:host=localhost;dbname='.$dbName.';charset=utf8mb4', $dbUser, $dbPass);
+		}
+		catch(PDOException $ex)
+		{
+			$dbUser = "eboxpchu";
+			$dbPass = "9iPHl3cu57";
+			$dbName = "eboxpchu_justabit";
+			$db = new PDO('mysql:host=localhost;dbname='.$dbName.';charset=utf8mb4', $dbUser, $dbPass);
+		}
+		
+		$res = $db->query('SELECT * FROM termeks WHERE webmegjel = 1 ORDER BY RAND() LIMIT 1');
+		if ($res <> false)
+		{
+			while($row = $res->fetch(PDO::FETCH_ASSOC)) {
+				$cikkNev = $row['cikknev'];
+				$termekID = $row['ID'];
+				$megj = $row['megj'];
+			}
+		}
+	}
+
+	function clean($string)
+	{
+		$string = str_replace(' ', '-', $string);
+		return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+	}
+
+	function echoTermekKep($termekkep,$nev,$num,$def)
+	{
+		if ($termekkep == "null")
+		{
+			try{
+				$search_keyword = str_replace(' ', '+', $nev);
+				$resultJson = file_get_contents("https://www.googleapis.com/customsearch/v1?q=".$search_keyword."&cr=hu&cx=009779612865427837205%3Axpxtwdfwsey&filter=1&num=3&searchType=image&key=AIzaSyBfOf4fOhQdaRxvvHogQgTnwAvhkCZMq_8");
+				$resultJson = json_decode($resultJson);
+				
+				echo '<img src="'.$result_image_source.'">';
+
+				echo '<img src="'.$resultJson->items[$num]->link.'" alt="'.$nev.'"/>';
+				echo '<a href="'.$resultJson->items[$num]->image->contextLink.'" target="_blank">Google kép</a>';
+			}
+			catch (Exception $a)
+			{
+				echo '<img src="'.$def.'" alt="'.$nev.'"/>';
+			}
+		}
+		else
+		{
+			echo '<img src="'.$termekkep.'" alt="'.$nev.'"/>';
+		}
+	}
+?>

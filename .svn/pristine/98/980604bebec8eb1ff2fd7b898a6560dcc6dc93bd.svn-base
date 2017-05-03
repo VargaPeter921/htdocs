@@ -1,0 +1,155 @@
+<?php
+	$pages = "pages/";
+	$styles = "styles/";
+	$scripts = "scripts/";
+	$images = "images/";
+	$d = "/";
+
+	require $pages.'header.php';
+?>
+<body onload="getSize()">
+
+<form method='post' id='form_size'>
+	<input type='hidden' name='width' id='inp_width'/>
+	<input type='hidden' name='height' id='inp_height'/>
+</form>
+
+<?php
+	require_once $pages.'logoSmall.php';
+	require $scripts.'functions.php';
+	if (isset($_GET['kategoria']))
+		headerRow('', $_GET['kategoria']);
+	else
+		headerRow('', null);
+?>
+
+<table id="boltTermekek">
+	<?php
+		$screenWidth = 1920;
+		$screenHeight = 1080;
+		
+		if(isset($_POST['recordSize']))
+		{
+			$screenHeight = $_POST['height'];
+			$screenWidth = $_POST['width'];
+		}
+
+		$maxMag = floor(($screenHeight-250)/320)/2;
+		$maxSzel = floor(($screenWidth)/233.75)/2;
+		if ($maxMag < 1) $maxMag = 1;
+		if ($maxSzel < 1) $maxSzel = 1;
+		?>
+		<?php
+
+		if (isset($_GET['keres']))
+			$keres = $_GET['keres'];
+		else
+			$keres = '';
+
+		$list = '';
+
+		if (termekCheck('', $list, $keres) == 0)
+		{
+			echo '<div class="midErr">A keresett kifejezésre nincs találat.</div>';
+		}
+		else if (termekCheck('', $list, $keres) == 1)
+		{
+			header("location: http://www.google.com/");
+		}
+		else
+		{
+			for ($x = 0; $x < ($maxMag); $x++)
+			{
+				echo '<tr>';
+				for ($i = 0; $i < ($maxSzel); $i++)
+				{
+
+					$rand = rand(1,100);
+					if ($rand <= 25)
+					{
+						if (isset($_GET['pf']) && isset($_GET['pt']))
+						{
+							$arSzures[0] = $_GET['pf'];
+							$arSzures[1] = $_GET['pt'];
+						}
+						else $arSzures = null;
+
+						//Terméklekérés, szűréstől függ
+						if (isset($_GET['kategoria']))
+							$ret = termekLekeres($_GET['kategoria'], $list, $keres, $arSzures);
+						else
+							$ret = termekLekeres('',$list, $keres, $arSzures);
+
+						echo '
+						<td>
+							<a href="/'.clean($ret[0]).'-t'.str_pad($ret[4], 6, '0', STR_PAD_LEFT).'"><div class="nagyBoltTermek">
+								<img class="hover center" src="'.$ret[1].'" alt="">
+								<span class="boltTermekText nagy">
+									'.$ret[3].'
+								</span>
+								<div class="nagyTermekCim">
+									'.$ret[0].'
+								</div>
+								<div class="nagyTermekAr">
+									'.echoAr(1, $ret[2]).' Ft
+								</div>
+							</div></a>
+						</td>
+						';
+
+						$list = $list.$ret[6];
+					}
+					else
+					{
+						echo '<td><table style="border: none;" cellspacing="0" cellpadding="0">';
+							for ($a = 0; $a < 2; $a++)
+							{
+								echo '<tr>';
+								for ($b = 0; $b < 2; $b++)
+								{
+									if (isset($_GET['pf']) && isset($_GET['pt']))
+									{
+										$arSzures[0] = $_GET['pf'];
+										$arSzures[1] = $_GET['pt'];
+									}
+									else $arSzures = null;
+
+									//Terméklekérés, szűréstől függ
+									if (isset($_GET['kategoria']))
+										$ret = termekLekeres($_GET['kategoria'], $list, $keres, $arSzures);
+									else
+										$ret = termekLekeres('', $list, $keres, $arSzures);
+
+									echo '
+									<td>
+										<a href="/'.clean($ret[0]).'-t'.str_pad($ret[4], 6, '0', STR_PAD_LEFT).'"><div class="boltTermek">
+											<img class="hover center" src="'.$ret[1].'" alt="">
+											<span class="boltTermekText">
+												'.$ret[3].'
+											</span>
+											<div class="termekCim">
+												'.$ret[0].'
+											</div>
+											<div class="termekAr">
+												'.echoAr(1,$ret[2]).' Ft
+											</div>
+										</div></a>
+									</td>
+									';
+									$list = $list.$ret[6];
+								}
+								echo '</tr>';
+							}
+						echo '</table></td>';
+					}
+				}
+				echo '</tr>';
+			}
+		}
+	?>
+</table>
+<?php
+	require $pages.'footer.php';
+?>
+</body>
+</html>

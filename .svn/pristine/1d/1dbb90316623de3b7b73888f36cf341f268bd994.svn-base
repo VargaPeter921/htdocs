@@ -1,0 +1,143 @@
+<?php
+
+	if(substr($_SERVER['REQUEST_URI'], -7)[0] == 't')
+	{
+		try
+		{
+			$id = substr($_SERVER['REQUEST_URI'], -6);
+			$termek = DB::select('SELECT * FROM termeks WHERE id = ?', [$id]);
+			$termekar = DB::select('SELECT * FROM termekar WHERE cikkid = ?', [$termek[0]->cikkid]);
+			if (!empty($termekar))
+				$termekar = $termekar[0];
+			else
+				$termekar = 0;
+
+			echo '<title>'.$termek[0]->cikknev.' - Ebox Informatika Kft</title>';
+			for ($i = 0; $i < 3; $i++)
+			{
+				$termekkep[$i] = DB::select('SELECT * FROM termekkep WHERE termekID = "'.$id.'" ORDER BY RAND() LIMIT 1');
+				if ($termekkep[$i] <> false)
+					$termekkep[$i] = $termekkep[$i][0]->kepEleres;
+				else
+					$termekkep[$i] = "null";
+			}
+
+			$pages = "pages/";
+			$styles = "styles/";
+			$scripts = "scripts/";
+			$images = "images/";
+			$d = "/";
+			$def = $images."default.jpg";
+			
+			include $pages.'header.php';
+			include_once($scripts.'simple_html_dom.php');
+
+			?>
+			<div id="body">
+
+			<?php
+				require_once $pages.'logoSmall.php';
+				require $scripts.'functions.php';
+			?>
+
+			<div id="categories">
+				Kategóriák
+			</div>
+			<div id="oldalak">
+				<a href="/">Főoldal</a>
+				<a href="/bolt"> > Bolt</a>
+				<?php echo '<a href="/bolt?kategoria='.$termek[0]->focsoportnev.'">> '.$termek[0]->focsoportnev; ?></a>
+				<a href="#">> <?php echo $termek[0]->cikknev; ?></a>
+			</div>
+
+			<div id="termekBody">
+				<div id="termekKepek">
+					<div id="bigimages">
+						<?php for ($i = 1; $i <= 3; $i++) {
+							echo '<div id="normal'.$i.'">';
+							echoTermekKep($termekkep[$i-1], $termek[0]->cikknev, $i, $def, $id, true);
+							echo '</div>'; } ?>
+					</div>
+
+					<div id="thumbs">
+						<?php for ($i = 1; $i <= 3; $i++) {
+							echo '<a href="javascript: changeImage('.$i.');">';
+							echoTermekKep($termekkep[$i-1], $termek[0]->cikknev, $i, $def, $id, false);
+							echo '</a>'; } ?>
+					</div>
+				</div>
+				<div id="termekLeiras">
+					<p id="termekesCim"><?php echo $termek[0]->cikknev; ?></p>
+						<?php
+							//Ha van leírás, akkor mindkét felület kiírása, ha nincs, akkor csak a megjegyzést
+							if (!empty($termek[0]->leiras))
+							{
+								echo '<a id="leiras" onclick="replace(\'aSpecifikacio\',\'aLeiras\')">Leírás</a>
+									<a id="specifikacio" onclick="replace(\'aLeiras\',\'aSpecifikacio\')">Specifikáció</a>
+									
+									<div id="leirasSpecSzoveg">
+									<div id="aLeiras" style="display:block">'.$termek[0]->leiras.'</div>
+									<div id="aSpecifikacio" style="display:none">'.$termek[0]->megj.'</div>
+									</div>';
+							}
+							else
+							{
+								echo '<div id="leiras">Specifikáció</div>
+									<div id="leirasSpecSzoveg"><div id="aSpecifikacio" style="display:block">'.$termek[0]->megj.'</div></div>';
+							}
+							?>
+					</div>
+				<div id="termekRendeles">
+					<div id="termekNetto"><?php echo echoAr(1, $termekar); ?> Ft</div>
+					<div id="termekBrutto">Nettó: <?php echo echoAr(0, $termekar); ?> Ft</div>
+					<a href="#"><div id="rend">Kosárba <c class="fa fa-shopping-cart"/></div></a>
+					<a href="#"><div id="rend">Kedvencekhez <c class="fa fa-heart"/></div></a>
+					<!--<div id="rend">Raktáron:</div>
+					<div id="rend">Átvétel:</div>
+					<div id="rend">Szállítás:</div>
+					-->
+				</div>
+				<div id="termekHasonlo">
+					<p id="termekesCim">Hasonló Termékek</p>
+					<table>
+					<?php
+						$list = '';
+						for ($x = 0; $x < 3; $x++)
+						{
+							echo '<tr>';
+							for ($i = 0; $i < 4; $i++)
+							{
+								$ret = termekLekeres($termek[0]->focsoportnev,$list,'');
+								echo '
+									<td>
+										<a href="/'.clean($ret[0]).'-t'.str_pad($ret[4], 6, '0', STR_PAD_LEFT).'"><div class="hasonloTermek">
+											<img class="hover center" src="'.$d.$ret[1].'" alt="">
+											
+											<div class="termekCim">
+												'.$ret[0].'
+											</div>
+											<div class="termekAr">
+												'.echoAr(1, $ret[2]).' Ft
+											</div>
+										</div></a>
+									</td>
+									';
+								$list = $list.$ret[6];
+							}
+							echo '</tr>';
+						}
+					?>
+					</table>
+				</div>
+			</div>
+			<?php
+				require $pages.'footer.php';
+		}
+		catch (Exception $e)
+		{
+			echo $e->getMessage();
+		}
+	}
+	else
+	echo '404';
+?>

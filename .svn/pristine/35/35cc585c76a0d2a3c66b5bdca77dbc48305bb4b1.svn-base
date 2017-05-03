@@ -1,0 +1,217 @@
+<?php
+	$pages = "pages/";
+	$styles = "styles/";
+	$scripts = "scripts/";
+	$images = "images/";
+	$d = "/";
+	
+	include $pages.'header.php';
+?>
+<body onload="currentDiv(1);">
+
+<?php
+	include $pages.'logo.php';
+?>
+
+<div id="topmid">
+	<div id="okosotthon">
+		<img src="images/okosotthon.gif" onmouseover="this.src='images/okosotthon_hover.jpg'" onmouseout="this.src='images/okosotthon.gif'">
+		<div class="midCim">
+			Kezdőlap
+		</div>
+
+	</div>
+	<div id="webshop">
+		<a href="./bolt">
+			<img src="images/webshop.gif" onmouseover="this.src='images/webshop_hover.png'" onmouseout="this.src='images/webshop.gif'">
+		</a>
+		<div class="midCim">
+			Bolt
+		</div>
+	</div>
+	<div id="projektor">
+		<img src="images/projektor.gif" onmouseover="this.src='images/projektor_hover.jpg'" onmouseout="this.src='images/projektor.gif'" width="235">
+		<div class="midCim midCimSmall">
+			Projektor bérlés
+		</div>
+	</div>
+	<div id="aboutus">
+		<img src="images/aboutus.gif" onmouseover="this.src='images/aboutus_hover.jpg'" onmouseout="this.src='images/aboutus.gif'" width="235">
+		<div class="midCim midCimSmall">
+			Rólunk
+		</div>
+	</div>
+</div>
+
+<div id="topright">
+	<div id="topRight_R1_01">
+		<img src="images/topRightR11.png" alt="">
+	</div>
+	<div id="topRight_R1_02">
+		<img src="images/topRightR12.png" alt="">
+	</div>
+	
+	<div id="banner">
+		<img src="images/justabit.jpg" alt="">
+	</div>
+</div>
+
+<div id="termekek">
+	<div class="termek termek1">
+		<img class="termek1img hover" src="images/topRightR3_01.png" alt="">
+		<span class="termekText"><span>
+			Érzékenység: 98 dB<br/>
+			Névleges impedancia: 24 Ohm<br/>
+			Frekvenciaátvitel: 12 - 22 000 Hz<br/>
+			Kábelhossz: 1.2 m<br/>
+			Szín: Fehér<br/>
+		</span></span>
+		<div class="termekCim">
+			SONY MDR-X110
+		</div>
+		<div class="termekAr">
+			6.990 Ft
+		</div>
+	</div>
+	<div class="termek termek2">
+		<img class="termek1img hover" src="images/topRightR3_02.png" alt="">
+		<span class="termekText"><span>
+			Típus: Aktív<br/>
+			Áramellátás: USB<br/>
+			USB portok száma: 2<br/>
+			Maximális méret: 17.3"<br/>
+		</span></span>
+		<div class="termekCim">
+			TRUST GXT277 LAPTOP HŰTŐ
+		</div>
+		<div class="termekAr">
+			8.990 Ft
+		</div>
+	</div>
+	<div class="termek termek3">
+		<img class="termek1img hover" src="images/topRightR3_03.png" alt="">
+		<span class="termekText"><span>
+			Egér típusa: Optikai</br>
+			Egér csatlakoztatása: USB</br>
+			Vezeték nélküli: Nem</br>
+		</span></span>
+		<div class="termekCim">
+			APPROX APPFIRE GAMER EGÉR
+		</div>
+		<div class="termekAr">
+			4.990 Ft
+		</div>
+	</div>
+	<div class="termek termek4">
+		<img class="termek1img hover" src="images/topRightR3_04.png" alt="">
+		<span class="termekText"><span>
+			Multimedia billentyűzet<br/>
+			Háttérvilágítás<br/>
+		</span></span>
+		<div class="termekCim">
+			TRUST GXT280 BILLENTYŰZET
+		</div>
+		<div class="termekAr">
+			10.490 Ft
+		</div>
+	</div>
+</div>
+
+<div id="leftR1">
+	<div id="map">
+		<iframe width="480" height="210" frameborder="0" src=	"https://www.google.com/maps/embed/v1/place?key=AIzaSyBHKP4C6ic-cC_HGsjIn_uA5knqUvdHaic
+		&q=Ebox+Informatika+Kft.+Szeged">
+		</iframe>
+		
+		<div class="utvonal">
+			<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=Ebox+Informatika+Kft.+Szeged">
+			6723, Szeged, Debreceni utca 32 - Útvonaltervezés</a>
+		</div>
+	</div>
+	<div id="leftR1_2">
+		<img src="images/weather.png" alt="">
+	</div>
+</div>
+
+<div id="leftR2">
+	<div id="slider">
+		<img class="mySlides" src="images/slider_01.jpg">
+		<img class="mySlides" src="images/slider_02.png">
+		<div class="w3-center w3-display-bottommiddle" style="width:100%">
+			<div class="w3-left" onclick="plusDivs(-1)">&#10094;</div>
+			<div class="w3-right" onclick="plusDivs(1)">&#10095;</div>
+			<span class="w3-badge w3-border w3-hover-white" onclick="currentDiv(1)"></span>
+			<span class="w3-badge w3-border w3-hover-white" onclick="currentDiv(2)"></span>
+		</div>
+	</div>
+</div>
+
+<div id="vids">
+	<div id="vidBig">
+		<iframe width="520" height="292"
+src="https://www.youtube.com/embed/LPFi5YEeqao?&autoplay=0&showinfo=0">
+</iframe>
+	</div>
+</div>
+
+<div id="news">
+	<div id="news01">
+		<div class="newTitle">
+			HÍREK
+		</div>
+		
+		<table id="newContent">
+			<tr><td>
+				Mesterséges intelligencia, ami saját magát tanította meg beszélni
+			</td></tr>
+			<tr><td>
+				Az előrendelt Galaxy S8-akat hamarabb kapják meg tulajdonosaik
+			</td></tr>
+			<tr><td>
+				A Samsung bejelentette Bixbyt, saját virtuális asszisztensét
+			</td></tr>
+			<tr><td>
+				Itt a tavasz... xD
+			</td></tr>
+		</table>
+	</div>
+	<div id="news02">
+		<div class="newTitle">
+			ÚJDONSÁGOK
+		</div>
+		
+		<table id="newContent">
+			<tr><td>
+				Új csúcsmobil a Vodafone-nál
+			</td></tr>
+			<tr><td>
+				Az okosruha lehet a következő nagy durranás?
+			</td></tr>
+			<tr><td>
+				Tölthető az Android O első kiadása
+			</td></tr>
+			<tr><td>
+				Réparetek mogyoró, korán reggel ritkán rikkant a rigó
+			</td></tr>
+		</table>
+	</div>
+</div>
+
+<div id="footer">
+	<div id="footerLeft">
+		<img src="images/footerLeft.png" alt="">
+	</div>
+	<div id="footerMid">
+		<img src="images/footerMid.png" alt="">
+	</div>
+	<div id="footerRight">
+		<img src="images/footerRight.png" alt="">
+	</div>
+</div>
+
+<?php
+	require $pages.'footer.php';
+?>
+
+</body>
+</html>

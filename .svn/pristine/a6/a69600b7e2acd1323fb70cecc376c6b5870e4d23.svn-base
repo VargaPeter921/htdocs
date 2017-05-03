@@ -1,0 +1,122 @@
+<?php
+	$pages = "pages/";
+	$styles = "styles/";
+	$scripts = "scripts/";
+	$images = "images/";
+	$d = "/";
+
+	require $pages.'header.php';
+?>
+<body onload="getSize()">
+
+<form method='post' id='form_size'>
+	<input type='hidden' name='width' id='inp_width'/>
+	<input type='hidden' name='height' id='inp_height'/>
+</form>
+
+<?php
+	echo '<embed src="'.$images.'eboxlogosmall.svg" type="image/svg+xml" />';
+	require $scripts.'functions.php';
+?>
+
+<div id="categories">
+	Kategóriák
+</div>
+<div id="oldalak">
+	<a href="/">Főoldal</a>
+	<a href="/bolt"> > Bolt</a>
+	<?php
+		if (isset($_GET['kategoria']))
+		{
+			echo '<a href="/bolt"> > '.$_GET['kategoria'].'</a>';
+		}
+	?>
+</div>
+
+<table id="boltTermekek">
+	<?php
+		$screenWidth = 1920;
+		$screenHeight = 1080;
+		
+		if(isset($_POST['recordSize']))
+		{
+			$screenHeight = $_POST['height'];
+			$screenWidth = $_POST['width'];
+		}
+
+		$maxMag = floor(($screenHeight-250)/320)/2;
+		$maxSzel = floor(($screenWidth)/233.75)/2;
+		if ($maxMag < 1) $maxMag = 1;
+		if ($maxSzel < 1) $maxSzel = 1;
+		?>
+		<?php
+		for ($x = 0; $x < ($maxMag); $x++)
+		{
+			echo '<tr>';
+			for ($i = 0; $i < ($maxSzel); $i++)
+			{
+				//Terméklekérés, szűréstől függ
+				if (isset($_GET['kategoria']))
+					$ret = termekLekeres($_GET['kategoria']);
+				else
+					$ret = termekLekeres('');
+
+				$rand = rand(1,100);
+				if ($rand <= 10)
+				{
+					echo '
+					<td>
+						<a href="/'.clean($ret[0]).'-t'.str_pad($ret[4], 6, '0', STR_PAD_LEFT).'"><div class="nagyBoltTermek">
+							<img class="hover center" src="'.$d.$ret[1].'" alt="">
+							<span class="boltTermekText nagy">
+								'.$ret[3].'
+							</span>
+							<div class="nagyTermekCim">
+								'.$ret[0].'
+							</div>
+							<div class="nagyTermekAr">
+								'.$ret[2].' Ft
+							</div>
+						</div></a>
+					</td>
+					';
+				}
+				else
+				{
+					echo '<td><table style="border: none;" cellspacing="0" cellpadding="0">';
+						for ($a = 0; $a < 2; $a++)
+						{
+							echo '<tr>';
+							for ($b = 0; $b < 2; $b++)
+							{
+								echo '
+								<td>
+									<a href="/'.clean($ret[0]).'-t'.str_pad($ret[4], 6, '0', STR_PAD_LEFT).'"><div class="boltTermek">
+										<img class="hover center" src="'.$d.$ret[1].'" alt="">
+										<span class="boltTermekText">
+											'.$ret[3].'
+										</span>
+										<div class="termekCim">
+											'.$ret[0].'
+										</div>
+										<div class="termekAr">
+											'.$ret[2].' Ft
+										</div>
+									</div></a>
+								</td>
+								';
+							}
+							echo '</tr>';
+						}
+					echo '</table></td>';
+				}
+			}
+			echo '</tr>';
+		}
+	?>
+</table>
+<?php
+	require $pages.'footer.php';
+?>
+</body>
+</html>

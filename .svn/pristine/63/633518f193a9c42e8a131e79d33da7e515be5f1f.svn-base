@@ -1,0 +1,28 @@
+<?php
+	function termekLekeres()
+	{
+		$dbUser = "root";
+		$dbPass = "";
+		$dbName = "eboxbolt";
+		
+		$dbUser = "eboxpchu";
+		$dbPass = "9iPHl3cu57";
+		$dbName = "eboxpchu_bolt";
+	
+		$db = new PDO('mysql:host=localhost;dbname='.$dbName.';charset=utf8mb4', $dbUser, $dbPass);
+		
+		$res = $db->query('SELECT * FROM termekek ORDER BY RAND() LIMIT 1');
+		while($row = $res->fetch(PDO::FETCH_ASSOC)) {
+			$cikkNev = $row['cikknev'];
+			$termekID = $row['ID'];
+		}
+		
+		$res = $db->query('SELECT * FROM termekKep WHERE termekID = '.$termekID.' ORDER BY RAND() LIMIT 1');
+		while($row = $res->fetch(PDO::FETCH_ASSOC)) {
+			$termekKep = $row['kepEleres'];
+		}
+		
+		return array ($cikkNev, $termekKep);
+	}
+
+?>

@@ -1,0 +1,125 @@
+<?php
+	if(substr($_SERVER['REQUEST_URI'], -7)[0] == 't')
+	{
+		try
+		{
+			$id = substr($_SERVER['REQUEST_URI'], -6);
+			$termek = DB::select('SELECT * FROM termeks WHERE id = ?', [$id]);
+			$termekar = DB::select('SELECT * FROM termekar WHERE termekID = ?', [$id]);
+			echo '<title>'.$termek[0]->cikknev.' - Ebox Informatika Kft</title>';
+
+			$termekkep = DB::select('SELECT * FROM termekkep WHERE termekID = "'.$id.'" ORDER BY RAND() LIMIT 1');
+			if ($termekkep <> false)
+			{
+				$termekkep = $termekkep[0]->kepEleres;
+			}
+			else
+			{
+				$termekkep = "null";
+			}
+
+			$termekkep1 = DB::select('SELECT * FROM termekkep WHERE termekID = "'.$id.'" ORDER BY RAND() LIMIT 1');
+			if ($termekkep1 <> false)
+			{
+				$termekkep1 = $termekkep1[0]->kepEleres;
+			}
+			else
+			{
+				$termekkep1 = "null";
+			}
+
+			$termekkep2 = DB::select('SELECT * FROM termekkep WHERE termekID = "'.$id.'" ORDER BY RAND() LIMIT 1');
+			if ($termekkep2 <> false)
+			{
+				$termekkep2 = $termekkep2[0]->kepEleres;
+			}
+			else
+			{
+				$termekkep2 = "null";
+			}
+
+			$pages = "pages/";
+			$styles = "styles/";
+			$scripts = "scripts/";
+			$images = "images/";
+			$d = "/";
+			$def = $images."default.jpg";
+			
+			include $pages.'header.php';
+			include_once($scripts.'simple_html_dom.php');
+
+			?>
+			<div id="body">
+
+			<?php
+				//include $pages.'logo.php';
+				require $scripts.'functions.php';
+			?>
+
+			<div id="categories">
+				Kategóriák
+			</div>
+			<div id="oldalak">
+				<a href="/">Főoldal....</a>
+			</div>
+
+			<div id="termekBody">
+				<div id="termekKepek">
+					<div id="bigimages">
+						<div id="normal1">
+							<?php echoTermekKep($termekkep, $termek[0]->cikknev, 0, $def); ?>
+						</div>	
+						
+						<div id="normal2">
+							<?php echoTermekKep($termekkep1, $termek[0]->cikknev, 1, $def); ?>
+						</div>	
+						
+						<div id="normal3">
+							<?php echoTermekKep($termekkep2, $termek[0]->cikknev, 2, $def); ?>
+						</div>
+					</div>
+
+					<div id="thumbs">
+						<a href="javascript: changeImage(1);">
+							<?php echoTermekKep($termekkep, $termek[0]->cikknev, 0, $def); ?>
+						</a>
+						<a href="javascript: changeImage(2);">
+							<?php echoTermekKep($termekkep1, $termek[0]->cikknev, 1, $def); ?>
+						</a>
+						<a href="javascript: changeImage(3);">
+							<?php echoTermekKep($termekkep2, $termek[0]->cikknev, 2, $def); ?>
+						</a>
+					</div>
+				</div>
+				<div id="termekLeiras">
+					<p id="termekesCim"><?php echo $termek[0]->cikknev; ?></p>
+					<div id="leiraS">
+						LEÍRÁS
+					</div>
+					<div id="leirasTipus">
+						<?php echo $termek[0]->leiras; ?>
+					</div>
+				</div>
+				<div id="termekRendeles">
+					<div id="termekNetto"><?php echo number_format(ceil(($termekar[0]->normalAr)*1.27), 0, ',', ' '); ?> Ft</div>
+					<div id="termekBrutto">Nettó: <?php echo number_format($termekar[0]->normalAr, 0, ',', ' '); ?> Ft</div>
+					<a href="#"><div id="rend">Kosárba <c class="fa fa-shopping-cart"/></div></a>
+					<a href="#"><div id="rend">Kedvencekhez <c class="fa fa-heart"/></div></a>
+					<!--<div id="rend">Raktáron:</div>
+					<div id="rend">Átvétel:</div>
+					<div id="rend">Szállítás:</div>
+					-->
+				</div>
+				<div id="termekHasonlo">
+					<p id="termekesCim">Hasonló Termékek</p>
+				</div>
+			</div>
+			<?php
+				require $pages.'footer.php';
+		}
+		catch (Exception $e)
+		{
+			echo $e->getMessage();
+		}
+	}
+?>

@@ -1,0 +1,132 @@
+﻿<?php
+	function termekLekeres($focsoportnev)
+	{
+		if ($focsoportnev != '')
+		{
+			$focsoportnev = 'AND focsoportnev = "'.$focsoportnev.'"';
+		}
+		else $focsoportnev = null;
+
+		$termek = DB::select('SELECT * FROM termeks WHERE webmegjel = 1 '.$focsoportnev.' ORDER BY RAND() LIMIT 1');
+		$cikknev = $termek[0]->cikknev;
+		$megj = $termek[0]->megj;
+		$id = $termek[0]->ID;
+		$csoport = $termek[0]->focsoportnev;
+		
+		$termek = DB::select('SELECT * FROM termekkep WHERE termekID = "'.$id.'" ORDER BY RAND() LIMIT 1');
+		if ($termek <> false)
+		{
+			$termekkep = $termek[0]->kepEleres;
+		}
+		else
+		{
+			$termekkep = "images\default.jpg";
+		}
+		
+		$termek = DB::select('SELECT * FROM termekar WHERE termekID = '.$id.' ORDER BY RAND() LIMIT 1');
+		if ($termek <> false)
+		{
+			$termekar = $termek[0]->normalAr;
+		}
+		else
+		{
+			$termekar = 0;
+		}
+
+		$url = clean($csoport).'_'.clean($cikknev);
+		
+		return array ($cikknev, $termekkep, $termekar, $megj, $id, $url);
+	}
+	
+	function kategoriaLekeres()
+	{
+		$res = $db->query('SELECT * FROM termeks WHERE webmegjel = 1 ORDER BY RAND() LIMIT 1');
+		if ($res <> false)
+		{
+			while($row = $res->fetch(PDO::FETCH_ASSOC)) {
+				$cikkNev = $row['cikknev'];
+				$termekID = $row['ID'];
+				$megj = $row['megj'];
+			}
+		}
+	}
+
+	function clean($string)
+	{
+		$string = str_replace(' ', '-', $string);
+
+		$accents = array(
+				'á' => 'a', 'Á' => 'A',
+				'ä' => 'a', 'Ä' => 'A',
+				
+				'é' => 'e', 'É' => 'E',
+				
+				'í' => 'i', 'Í' => 'I',
+				
+				'ó' => 'o', 'Ó' => 'O',
+				'ö' => 'o', 'Ö' => 'O',
+				'ő' => 'o', 'Ő' => 'O',
+				
+				'ú' => 'u', 'Ú' => 'U',
+				'ü' => 'u', 'Ü' => 'U',
+				'ű' => 'u', 'Ű' => 'U'
+		);
+		
+		foreach ($accents as $key => $val)
+		{
+			$string = preg_replace('#'.$key.'#', $val, $string);
+		}
+
+		return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+	}
+
+	function echoTermekKep($termekkep, $nev, $num, $def, $termekid, $big)
+	{
+		if ($termekkep == "null")
+		{
+			try {
+				$search_keyword = str_replace(' ', '+', $nev);
+				$resultJson = file_get_contents("https://www.googleapis.com/customsearch/v1?q=".$search_keyword."&cr=hu&cx=009779612865427837205%3Axpxtwdfwsey&filter=1&num=3&searchType=image&key=AIzaSyBmm4a7XWSY_n_MTMFWiGT9TYdcjvttvRk");
+				$resultJson = json_decode($resultJson);
+
+				$img = '/images/termekek/'.date("y").'/'.date("m").'/google_'.$search_keyword.'_'.$num.'.jpg';
+				file_put_contents($img, file_get_contents($resultJson->items[$num]->link));
+				$link = $resultJson->items[$num]->image->contextLink;
+				
+				DB::insert('INSERT INTO termekkep (termekID, kepEleres, kepForras) values (?, ?, ?)', [$termekid, $img, $link]);
+			}
+			catch (Exception $a){
+				//echo $a;
+			}
+			echo '<img src="'.$def.'" alt="'.$nev.'"/>';
+		}
+		else
+		{
+			try {
+				$termekkep = DB::select('SELECT * FROM termekkep WHERE termekID = ?', [$termekid]);
+				if ($termekkep[0]->kepForras !== NULL && $big)
+				{
+					echo '<a href="'.$termekkep[0]->kepForras.'" target="_blank">A kép forrásának megtekintése</a>';
+				}
+			}
+			catch (Exception $a)
+			{
+				echo '<img src="'.$def.'" alt="'.$nev.'"/>';
+			}
+		}		
+	}
+
+	function echoAr($i)
+	{
+		try {
+			if ($i == 1)
+				echo number_format(ceil(($termekar[0]->normalAr)*1.27), 0, ',', ' ');
+			else
+				echo number_format(ceil(($termekar[0]->normalAr)), 0, ',', ' ');
+		}
+		catch (Exception $a)
+		{
+			echo '0';
+		}
+	}
+?>

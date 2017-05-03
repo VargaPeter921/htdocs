@@ -1,0 +1,68 @@
+<html>
+<head>
+	<meta charset="iso-8559-1">
+</head>
+<style>
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+a:link, a:visited {
+    background-color: #f44336;
+    color: white;
+    padding: 14px 25px;
+    text-align: center; 
+    text-decoration: none;
+    display: inline-block;
+}
+
+a:hover, a:active {
+    background-color: red;
+}
+</style>
+<body>
+<?php
+	if (isset($_GET['update']))
+	{
+		$authcode = "23C2A04A-915C-4E13-A1C3-5198436E9FD5";
+		$client = new SoapClient('http://www.expert.hu/services/vision.asmx?WSDL',array("trace" => 1,"exceptions" => 0,'features' => SOAP_SINGLE_ELEMENT_ARRAYS));
+		$result = $client->GetCikkekAuth(array('web_update'=>'2017-04-10-10:00', 'authcode'=>$authcode));
+		var_dump($result);
+
+		
+		$Json = json_encode(simplexml_load_string($result));
+		file_put_contents("xmlExpert/full.xml",$Json);
+
+		/*$myfile = fopen("xmlExpert/full.xml", "w") or die("Unable to open file!");
+		fwrite($myfile, $result);
+		fclose($myfile);*/
+	}
+
+	$resultXml = file_get_contents("xmlExpert/full.xml", true);
+
+	//var_dump($resultXml);
+
+	$resultXml = str_replace("<![CDATA[", "", $resultXml);
+	$resultXml = str_replace("&lt;![CDATA[", "", $resultXml);
+	$resultXml = str_replace("]]>", "", $resultXml);
+	$resultXml = str_replace("]]&gt;", "", $resultXml);
+	$xml = simplexml_load_string($resultXml);
+	$Json = json_encode(simplexml_load_string($resultXml));
+	$data = json_decode($Json, true);
+
+	print_r($xml);
+
+	//echo $data[Body][ProductEntries][ProductEntry][$i][SimpleStock];
+?>
+</body>
+</html>

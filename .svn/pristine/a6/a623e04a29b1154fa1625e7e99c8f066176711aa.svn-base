@@ -1,0 +1,73 @@
+<?php
+	session_start();
+	$_SESSION['screen_size'] = array();
+	$_SESSION['screen_size']['width'] = intval($_POST['width']);
+	$_SESSION['screen_size']['height'] = intval($_POST['height']);
+?>
+
+<html>
+<head>
+	<title>Ebox Informatika Kft</title>
+	<link rel="stylesheet" href="../styles/def.css">
+	<meta charset="UTF-8">
+</head>
+<script src="../scripts/functions.js"></script>
+<body onload="currentDiv(1); getSize();">
+
+<form method='post' id='form_size'>
+	<input type='hidden' name='width' id='inp_width'/>
+	<input type='hidden' name='height' id='inp_height'/>
+</form>
+
+<div id="topleft">
+	<embed src="../images/eboxlogo.svg" type="image/svg+xml" />
+	<div class="leftCim">
+		<a href="mailto:info@ebox-pc.hu">info@ebox-pc.hu</a>
+	</div>
+	<div class="leftTel">
+		<a href="tel:06206677131">+36 20/66-77-131</a>
+	</div>
+	<div class="search">
+		<input type="text" value="Kereső" class="searchBar">
+		<a href="#"><button class="searchButton hidden"></button></a>
+	</div>
+</div>
+
+<table id="boltTermekek">
+	<?php
+		$screenWidth = 1920;
+		$screenHeight = 1080;
+		for ($i = 0; $x < floor($screenHeight/320)-1; $x++)
+		{
+			echo '<tr>';
+			for ($i = 0; $i < floor($screenWidth/230); $i++)
+			{
+				echo '
+					<td>
+						<div class="boltTermek">
+							<img class="hover" src="../images/topRightR3_01.png" alt="">
+							<span class="boltTermekText"><span>
+								Érzékenység: 98 dB<br/>
+								Névleges impedancia: 24 Ohm<br/>
+								Frekvenciaátvitel: 12 - 22 000 Hz<br/>
+								Kábelhossz: 1.2 m<br/>
+								Szín: Fehér<br/>
+							</span></span>
+							<div class="boltTermekCim">
+								SONY MDR-X110
+							</div>
+							<div class="boltTermekAr">
+								6.990 Ft
+							</div>
+						</div>
+					</td>
+					';
+			}
+			echo '</tr>';
+		}
+		
+		var_dump($_SESSION['screen_size']);
+	?>
+</table>
+</body>
+</html>

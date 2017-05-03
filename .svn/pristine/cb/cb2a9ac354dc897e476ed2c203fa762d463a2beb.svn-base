@@ -1,0 +1,38 @@
+<style>
+table {
+    border-collapse: collapse;
+    width: calc(100% - 40px);
+    border: 1px solid #4CAF50;
+    margin: auto 20px;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+#image
+{
+    max-width: 500px;
+    max-height: 200px;
+}
+</style>
+
+<?php
+    $files = scandir('img/');
+    echo '<table><th>Név</th><th>Kép</th><tr>';
+    foreach($files as $file)
+    {
+        echo '<tr>';
+        echo '<td>'.$file.'</td>';
+        echo '<td><img id="image" src="img/'.$file.'"></td>';
+        echo '</tr>';
+    }
+    echo '</table>';
+?>

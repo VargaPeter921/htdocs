@@ -1,0 +1,13 @@
+<div id="logo">
+	<embed src="<?php echo $images ?>eboxlogo.svg" type="image/svg+xml" />
+	<div class="leftCim">
+		<a href="mailto:info@ebox-pc.hu">info@ebox-pc.hu</a>
+	</div>
+	<div class="leftTel">
+		<a href="tel:06206677131">+36 20/66-77-131</a>
+	</div>
+	<div class="search">
+		<input type="text" placeholder="Kereső" class="searchBar">
+		<a href="#"><button class="searchButton hidden"></button></a>
+	</div>
+</div>

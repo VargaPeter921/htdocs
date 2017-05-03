@@ -1,0 +1,31 @@
+<?php
+
+	if(substr($_SERVER['REQUEST_URI'], -7)[0] == 't')
+	{
+		try
+		{
+			$id = substr($_SERVER['REQUEST_URI'], -6);
+			$termek = DB::select('SELECT * FROM termeks WHERE id = ?', [$id]);
+			echo '<title>'.$termek[0]->cikknev.' - Ebox Informatika Kft</title>';
+		}
+		catch (Exception $e)
+		{
+			echo $e->getMessage();
+		}
+	}
+
+	$pages = "pages/";
+	$styles = "styles/";
+	$scripts = "scripts/";
+	$images = "images/";
+	$d = "/";
+	
+	include $pages.'header.php';
+?>
+<body onload="currentDiv(1);">
+<div id="body">
+
+<?php
+	//include $pages.'logo.php';
+	require $scripts.'functions.php';
+?>

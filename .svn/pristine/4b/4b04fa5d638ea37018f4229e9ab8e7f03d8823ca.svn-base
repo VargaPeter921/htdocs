@@ -1,0 +1,327 @@
+﻿<?php
+	function termekCheck($focsoportnev, $termekszures, $keres)
+	{
+		$tax = DB::select('SELECT value FROM la_configs WHERE `key` = "pricetax"');
+		$profit = DB::select('SELECT value FROM la_configs WHERE `key` = "profit"');
+
+		if ($focsoportnev != '')
+			$focsoportnev = 'AND TS.focsoportnev = "'.$focsoportnev.'"';
+		else $focsoportnev = null;
+
+		if ($termekszures != '')
+			$termekszures = 'AND cikkid NOT IN('.$termekszures.')';
+		else $termekszures = null;
+
+		if (!empty($arSzures))
+		{
+			$arSzures = ' AND (normalAr*'.$tax[0]->value*$profit[0]->value.') BETWEEN '.$arSzures[0].' AND '.$arSzures[1].' ';
+		}
+		else $arSzures = null;
+
+		if ($keres != '')
+		{
+			$accents = array('+',' ');
+			foreach ($accents as $key)
+				$keres = str_replace($key, '%', $keres);
+			
+			$keres = 'AND CONCAT_WS(\' \', cikknev, leiras, megj, cikkcsoportnev, cikkfajta, focsoportnev) like "%'.$keres.'%"';
+		}
+		else $keres = null;
+
+		$ftermek = DB::select('SELECT COUNT(*) as count FROM termeks AS TS WHERE TS.webmegjel = 1 AND TS.beszerzesiallapot = 1 '.$termekszures.' '.$focsoportnev.' '.$keres.' AND EXISTS (SELECT 1 FROM termekar WHERE cikkid = TS.cikkid AND normalAr > 0 '.$arSzures.')');
+
+		return $ftermek[0]->count;
+	}
+
+	function termekLekeres($focsoportnev, $termekszures, $keres, $arSzures, $kellKep)
+	{
+		$tax = DB::select('SELECT value FROM la_configs WHERE `key` = "pricetax"');
+		$profit = DB::select('SELECT value FROM la_configs WHERE `key` = "profit"');
+
+		if ($focsoportnev != '')
+			$focsoportnev = 'AND TS.focsoportnev = "'.$focsoportnev.'"';
+		else $focsoportnev = null;
+
+		if ($termekszures != '')
+			$termekszures = 'AND cikkid NOT IN('.$termekszures.')';
+		else $termekszures = null;
+
+		if (!empty($arSzures))
+		{
+			$arSzures = ' AND (normalAr*'.$tax[0]->value*$profit[0]->value.') BETWEEN '.$arSzures[0].' AND '.$arSzures[1].' ';
+		}
+		else $arSzures = null;
+
+		if ($keres != '')
+		{
+			$accents = array('+',' ');
+			foreach ($accents as $key)
+				$keres = str_replace($key, '%', $keres);
+			
+			$keres = 'AND CONCAT_WS(\' \', cikknev, leiras, megj, cikkcsoportnev, cikkfajta, focsoportnev, gycikkszam) like "%'.$keres.'%"';
+		}
+		else $keres = null;
+
+		if ($kellKep != '')
+			$kellKep = 'AND EXISTS (SELECT 1 FROM termekkep WHERE cikkid = TS.cikkid)';
+		else $kellKep = null;
+
+		$ftermek = DB::select('SELECT TS.* FROM termeks AS TS WHERE TS.webmegjel = 1 AND TS.beszerzesiallapot = 1 '.$termekszures.' '.$focsoportnev.' '.$keres.' '.$kellKep.' AND EXISTS (SELECT 1 FROM termekar WHERE cikkid = TS.cikkid AND normalAr > 0 '.$arSzures.') ORDER BY RAND() LIMIT 1');
+
+		if (empty($ftermek))
+		{
+			$cikknev = '0';
+			$termekkep = '0';
+			$termekar = '0';
+			$megj = '0';
+			$id = '0';
+			$url = '0';
+			$temp = '0';
+			$cikkid = "0";
+		}
+		else
+		{
+			$cikknev = $ftermek[0]->cikknev;
+			$megj = $ftermek[0]->megj;
+			$id = $ftermek[0]->ID;
+			$csoport = $ftermek[0]->focsoportnev;
+			$cikkid = $ftermek[0]->cikkid;
+			
+			$termekkep = DB::select('SELECT * FROM termekkep WHERE cikkid = "'.$ftermek[0]->cikkid.'" ORDER BY RAND() LIMIT 1');
+
+			/*echo '<pre>';
+			print_r($termekkep);
+			echo '</pre>';*/
+
+			if (!empty($termekkep) && file_exists($_SERVER['DOCUMENT_ROOT'].$termekkep[0]->kepEleres))
+			{
+				$termekkep = $termekkep[0]->kepEleres;
+			}
+			else
+				$termekkep = "/images/default.jpg";
+			
+			$termekar = DB::select('SELECT * FROM termekar WHERE cikkid = "'.$ftermek[0]->cikkid.'"');
+			if (!empty($termekar))
+				$termekar = $termekar[0];
+			else
+				$termekar = 0;
+
+			$url = clean($csoport).'_'.clean($cikknev);
+		}
+		
+		return array ($cikknev, $termekkep, $termekar, $megj, $id, $url, $cikkid);
+	}
+	
+	function kategoriaLekeres()
+	{
+		$res = $db->query('SELECT * FROM termeks WHERE webmegjel = 1 AND beszerzesiallapot = 1 ORDER BY RAND() LIMIT 1');
+		if (!empty($res))
+		{
+			while($row = $res->fetch(PDO::FETCH_ASSOC)) {
+				$cikkNev = $row['cikknev'];
+				$termekID = $row['ID'];
+				$megj = $row['megj'];
+			}
+		}
+	}
+
+	function clean($string)
+	{
+		$string = str_replace(' ', '-', $string);
+
+		$accents = array(
+			'á' => 'a', 'Á' => 'A',
+			'ä' => 'a', 'Ä' => 'A',
+			'é' => 'e', 'É' => 'E',
+			'í' => 'i', 'Í' => 'I',
+			'ó' => 'o', 'Ó' => 'O',
+			'ö' => 'o', 'Ö' => 'O',
+			'ő' => 'o', 'Ő' => 'O',
+			'ú' => 'u', 'Ú' => 'U',
+			'ü' => 'u', 'Ü' => 'U',
+			'ű' => 'u', 'Ű' => 'U'
+		);
+		
+		foreach ($accents as $key => $val)
+		{
+			$string = preg_replace('#'.$key.'#', $val, $string);
+		}
+
+		return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+	}
+
+	function echoTermekKep($termekkep, $nev, $num, $def, $cikkid, $big)
+	{
+		if ($termekkep == "null")
+		{
+			/*try {
+				$search_keyword = str_replace(' ', '+', $nev);
+				$resultJson = file_get_contents("https://www.googleapis.com/customsearch/v1?q=".$search_keyword."&cr=hu&cx=009779612865427837205%3Axpxtwdfwsey&filter=1&num=3&searchType=image&key=AIzaSyBmm4a7XWSY_n_MTMFWiGT9TYdcjvttvRk");
+				$resultJson = json_decode($resultJson);
+
+				$img = '/images/termekek/'.date("y").'/'.date("m").'/google_'.$search_keyword.'_'.$num.'.jpg';
+				file_put_contents($img, file_get_contents($resultJson->items[$num]->link));
+				$link = $resultJson->items[$num]->image->contextLink;
+				
+				DB::insert('INSERT INTO termekkep (termekID, kepEleres, kepForras) values (?, ?, ?)', [$termekid, $img, $link]);
+				$termekkep = DB::select('SELECT * FROM termekkep WHERE termekID = ? ORDER BY ID ASC', [$termekid]);
+				echo '<img src="'.$termekkep[$num+1]->kepEleres.'" alt="'.$nev.'"/>';
+			}
+			catch (Exception $a)
+			{
+				echo '<img src="'.$def.'" alt="'.$nev.'"/>';
+			}*/
+			echo '<img src="'.$def.'" alt="'.$nev.'"/>';
+		}
+		else
+		{
+			try {
+				$termekkep = DB::select('SELECT * FROM termekkep WHERE cikkid = ? ORDER BY ID ASC', [$cikkid]);
+				if ($termekkep[$num+1]->kepForras !== NULL && $big)
+				{
+					echo '<img src="'.$termekkep[$num+1]->kepEleres.'" alt="'.$nev.'"/>';
+					echo '<a href="'.$termekkep[$num+1]->kepForras.'" target="_blank">A kép forrásának megtekintése</a>';
+				}
+				else if(!$big)
+				{
+					echo '<img src="'.$termekkep[$num+1]->kepEleres.'" alt="'.$nev.'"/>';
+				}
+			}
+			catch (Exception $a)
+			{
+				echo '<img src="'.$def.'" alt="'.$nev.'"/>';
+			}
+		}		
+	}
+
+	function echoAr($normal, $ar)
+	{
+		$tax = DB::select('SELECT value FROM la_configs WHERE `key` = "pricetax"');
+		$profit = DB::select('SELECT value FROM la_configs WHERE `key` = "profit"');
+
+		if (!empty($ar))
+		{
+			try
+			{
+				if ($ar->normalAr <> $ar->akciosAr && $ar <> 0)
+				{
+					$ar = $ar->akciosAr;
+				}
+				else
+				{
+					$ar = $ar->normalAr;
+				}
+
+				if ($normal == 1)
+					$ret = number_format(ceil(($ar)*$tax[0]->value*$profit[0]->value), 0, ',', ' ');
+				else
+					$ret = number_format(ceil(($ar)*$profit[0]->value), 0, ',', ' ');
+
+				return $ret;
+			}
+			catch (Exception $a)
+			{
+				return 0;
+			}
+		}
+		else return 0;
+	}
+
+	function returnAr($normal, $ar)
+	{
+		if (!empty($ar))
+		{
+			if ($normal == 1)
+				$ret = floor(($ar)*1.27);
+			else
+				$ret = floor($ar);
+
+			return $ret;
+		}
+		else return 0;
+	}
+
+	function headerRow($termek, $category)
+	{
+		$cat = '';
+		if (!empty($termek))
+			$cat = '<a href="/bolt?kategoria='.$termek->focsoportnev.'"> > '.$termek->focsoportnev.'</a><a href="#"> > '.$termek->cikknev.'</a>';
+		if (!empty($category))
+		{
+			$cat = '<a href="/bolt?kategoria='.$category.'"> > '.$category.'</a>';
+		}
+		
+		echo '<div id="categories">Kategória...
+			';
+			/*<nav id="cbp-hrmenu" class="cbp-hrmenu">
+			<ul>
+				<li>
+					<a href="#">Termékek</a>
+					<div class="cbp-hrsub">
+						<div class="cbp-hrsub-inner"> 
+							<div>
+								<h4>Learning & Games</h4>
+								<ul>
+									<li><a href="#">Catch the Bullet</a></li>
+									<li><a href="#">Snoopydoo</a></li>
+									<!-- ... -->
+								</ul>
+							</div>
+							<div>
+								<h4>Utilities</h4>
+								<ul>
+									<li><a href="#">Gadget Finder</a></li>
+									<li><a href="#">Green Tree Express</a></li>
+									<li><a href="#">Green Tree Pro</a></li>
+									<li><a href="#">Wobbler 3.0</a></li>
+									<li><a href="#">Coolkid</a></li>
+								</ul>
+							</div>
+							<div>
+								<!-- ... -->
+							</div>
+						</div><!-- /cbp-hrsub-inner -->
+					</div><!-- /cbp-hrsub -->
+				</li>
+				<li><!-- ... --></li>
+				<li><!-- ... --></li>
+				<!-- ... -->
+			</ul>
+		</nav>
+			';*/
+
+
+
+
+
+
+			if (isset($_GET['kategoria']))
+				$kat = '<input hidden name="kategoria" value="'.$_GET['kategoria'].'">';
+			else $kat = '';
+
+			if (isset($_GET['pf']))
+				$arMin = $_GET['pf'];
+				else $arMin = 0;
+			if (isset($_GET['pt']))
+				$arMax = $_GET['pt'];
+				else $arMax = 0;
+
+			echo '
+			<form action="/bolt" method="get">'.$kat.'
+				Ár <input text name="pf" value="'.$arMin.'"/>
+				 - <input text name="pt" value="'.$arMax.'"/>
+				<input type="submit" value="Szűrés">
+				</form>
+			</div>
+
+			<div id="filter">
+				Szűrés
+			</div>
+			</div>
+			<div id="oldalak">
+				<a href="/">Főoldal</a>
+				<a href="/bolt"> > Bolt</a>
+				'.$cat.'
+			</div>';
+	}
+?>

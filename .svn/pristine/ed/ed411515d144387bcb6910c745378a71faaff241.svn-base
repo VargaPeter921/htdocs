@@ -1,0 +1,186 @@
+<body>
+	<p><a href="#">Cikkfeldolgozás</a></p>
+	<p><a href="#">Cikkeletöltés</a></p>
+
+	<p><a href="?ar&allProc">Árfeldolgozás</a></p>
+	<p><a href="?ar&getAr">Árlekérés</a></p>
+</body>
+
+<?php
+
+	ini_set('memory_limit', '500M');
+	ini_set('max_execution_time','300');
+
+	if (isset($_GET['cikk']))
+	{
+		$file = storage_path()."/xml/expert/full.xml";
+		
+		if (isset($_GET['update']))
+		{
+			$authcode = "23C2A04A-915C-4E13-A1C3-5198436E9FD5";
+			$client = new SoapClient('http://www.expert.hu/services/vision.asmx?WSDL',array("trace" => 1,"exceptions" => 0));
+			$result = $client->GetCikkekAuth(array('web_update'=>'2017-04-10-10:00', 'authcode'=>$authcode));
+			print_r($result);
+			
+			$Json = json_encode(simplexml_load_string($result));
+			file_put_contents($file,$Json);
+
+			$myfile = fopen($file, "w") or die("Unable to open file!");
+			fwrite($myfile, $result);
+			fclose($myfile);
+		}
+
+		$resultXml = file_get_contents($file, true);
+		$xml = simplexml_load_string($resultXml);
+
+		echo '<pre>';
+		//print_r($xml);
+		echo '</pre>';
+		
+		
+		/*foreach($xml->cikk[0] as $a)
+		{
+			echo $a.'</br>';
+		}
+		*/
+		for ($i = 0; $i < sizeOf($xml->cikk); $i++)
+		//for ($i = 0; $i < 10; $i++)
+		{
+
+			$meglevoTermek = DB::select('SELECT * FROM termeks WHERE cikkid = "'.$xml->cikk[$i]->attributes()->cikkid.'" LIMIT 1');
+			if (sizeOf($meglevoTermek) > 0)
+			{
+				echo $xml->cikk[$i]->cikknev.' már megtalálható: '.$xml->cikk[$i]->attributes()->cikkid.'</br>';
+			}
+			else
+			{
+				$meglevoGyarto = DB::select('SELECT id FROM gyartos WHERE name = "'.$xml->cikk[$i]->gyarto.'" LIMIT 1');
+				if (sizeOf($meglevoGyarto) == 0)
+				{
+					DB::table('gyartos')->insert(['name' => $xml->cikk[$i]->gyarto]);
+					$meglevoGyarto = DB::select('SELECT id FROM gyartos WHERE name = "'.$xml->cikk[$i]->gyarto.'" LIMIT 1');
+				}
+				$gyarto = $meglevoGyarto[0]->id;
+
+
+				DB::table('termeks')->insert(
+					[
+					'cikkid' => $xml->cikk[$i]->attributes()->cikkid, 
+					'cikkszam' => $xml->cikk[$i]->cikkszam, 
+					'cikkszam2' => $xml->cikk[$i]->cikkszam2, 
+					'cikknev' => $xml->cikk[$i]->cikknev, 
+					'mennyiseg' => $xml->cikk[$i]->mennyiseg, 
+					'kshszam' => $xml->cikk[$i]->kshszam, 
+					'gyarto' => $gyarto, 
+					'cikkcsoportkod' => $xml->cikk[$i]->cikkcsoportkod, 
+					'cikkcsoportnev' => $xml->cikk[$i]->cikkcsoportnev, 
+					'tipus' => $xml->cikk[$i]->tipus, 
+					'beszerzesiallapot' => $xml->cikk[$i]->beszerzesiallapot, 
+					'webigendatum' => $xml->cikk[$i]->webigendatum, 
+					'webmegjel' => $xml->cikk[$i]->webmegjel, 
+					'leiras' => $xml->cikk[$i]->leiras, 
+					'tomeg' => $xml->cikk[$i]->tomeg, 
+					'gartipusid' => $xml->cikk[$i]->gartipusid, 
+					'garido' => $xml->cikk[$i]->garido, 
+					'garidotipus' => $xml->cikk[$i]->garidotipus, 
+					'garhely' => $xml->cikk[$i]->garhely, 
+					'meret' => $xml->cikk[$i]->meret, 
+					'garhelytipus' => $xml->cikk[$i]->garhelytipus, 
+					'arlistapoz' => $xml->cikk[$i]->arlistapoz, 
+					'megj' => $xml->cikk[$i]->megj, 
+					'cikkfajta' => $xml->cikk[$i]->cikkfajta, 
+					'gycikkszam' => $xml->cikk[$i]->gycikkszam, 
+					'focsoportkod' => $xml->cikk[$i]->focsoportkod, 
+					'focsoportnev' => $xml->cikk[$i]->focsoportnev, 
+					'cikkjellnev' => $xml->cikk[$i]->cikkjellnev, 
+					'ertmenny' => $xml->cikk[$i]->ertmenny, 
+					'szigoru_szamadasu' => $xml->cikk[$i]->szigoru_szamadasu, 
+					'source' => '1',
+					]
+				);
+			}
+		}
+	}
+
+	if (isset($_GET['ar']))
+	{
+		if (isset($_GET['getAr']))
+		{
+			$authcode = "23C2A04A-915C-4E13-A1C3-5198436E9FD5";
+			$client = new SoapClient('http://www.expert.hu/services/vision.asmx?WSDL',array("trace" => 1,"exceptions" => 0));
+
+			$resultXml = file_get_contents($file, true);
+			$xml = simplexml_load_string($resultXml);
+
+			$result = $client->GetArakAuth(array('cikkekxml'=>$xml, 'authcode'=>$authcode));
+			print_r($result);
+
+			$file = storage_path()."/xml/expert/arak.xml";
+			
+			$Json = json_encode(simplexml_load_string($result));
+			file_put_contents($file,$Json);
+
+			$myfile = fopen($file, "w") or die("Unable to open file!");
+			fwrite($myfile, $result);
+			fclose($myfile);
+		}
+
+		if (isset($_GET['getArlista']))
+		{
+			$authcode = "23C2A04A-915C-4E13-A1C3-5198436E9FD5";
+			$client = new SoapClient('http://www.expert.hu/services/vision.asmx?WSDL',array("trace" => 1,"exceptions" => 0));
+
+			$result = $client->GetArlista(array('pid'=>'46932', 'partnerkod'=>'19941', 'authcode'=>$authcode));
+			print_r($result);
+
+			$file = storage_path()."/xml/expert/mindenAr.xml";
+			
+			$Json = json_encode(simplexml_load_string($result));
+			file_put_contents($file,$Json);
+
+			$myfile = fopen($file, "w") or die("Unable to open file!");
+			fwrite($myfile, $result);
+			fclose($myfile);
+		}
+
+		if (isset($_GET['allProc']))
+		{
+			echo '<p>Árfeldolgozás</p>';
+
+			$file = storage_path()."/xml/expert/allPrice.xml";
+			$resultXml = file_get_contents($file, true);
+			$xml = simplexml_load_string($resultXml);
+
+			echo $xml->arak->ar[0]->cikkid.'</br>';
+
+			echo 'Árak: '.sizeOf($xml->arak->ar).'</br>';
+
+			echo '<pre>';
+			//print_r($xml);
+			echo '</pre>';		
+			
+			for ($i = 0; $i < sizeOf($xml->arak->ar); $i++)
+			{
+				$meglevo = DB::select('SELECT 1 AS ret FROM termekar WHERE cikkid = "'.$xml->arak->ar[$i]->cikkid.'" LIMIT 1');
+
+				if (empty($meglevo))
+				{
+					DB::table('termekar')->insert(
+						[
+						'cikkid' => $xml->arak->ar[$i]->cikkid, 
+						'listaAr' => $xml->arak->ar[$i]->listaar, 
+						'akciosAr' => $xml->arak->ar[$i]->akcios_ar, 
+						'normalAr' => $xml->arak->ar[$i]->ar, 
+						'devizanem' => $xml->arak->ar[$i]->devizanem
+						]
+					);
+				}
+				else
+				{
+					DB::update('UPDATE termekar SET listaAr = ? AND akciosAr = ? AND normalAr = ? AND devizanem = ? WHERE cikkid = ?', 
+						[$xml->arak->ar[$i]->listaar, $xml->arak->ar[$i]->akcios_ar, $xml->arak->ar[$i]->normalAr, $xml->arak->ar[$i]->devizanem, $xml->arak->ar[$i]->cikkid]);
+				}
+			}
+		}
+	}
+?>

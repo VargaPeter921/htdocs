@@ -1,0 +1,51 @@
+{
+    "name": "vsch/laravel-translation-manager",
+    "description": "Enhanced Laravel Translation Manager",
+    "keywords": ["laravel", "translations", "translator"],
+    "homepage": "https://github.com/vsch/laravel-translation-manager",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vladimir Schneider",
+            "email": "vladimir.schneider@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": "~5.2",
+        "illuminate/translation": "~5.2",
+        "doctrine/dbal": "~2.3",
+        "laravelcollective/html": "~5.2",
+        "symfony/finder": "3.0.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/Classes"
+        ],
+        "files": [
+            "src/Support/helpers.php"
+        ],
+        "psr-4": {
+            "Vsch\\TranslationManager\\": "src/"
+        }
+    },
+    "require-dev": {
+        "fzaninotto/faker": "~1.4",
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "~4.1",
+        "phpspec/phpspec": "~2.1"
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
+        ],
+        "psr-4": {
+        }
+    },
+    "scripts": {
+        "post-update-cmd": [
+        ]
+    },
+    "minimum-stability": "stable"
+}

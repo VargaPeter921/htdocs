@@ -1,0 +1,92 @@
+<?php
+	function termekLekeres()
+	{
+		$dbUser = "root";
+		$dbPass = "";
+		$dbName = "eboxbolt";
+		
+		try 
+		{
+			$db = new PDO('mysql:host=localhost;dbname='.$dbName.';charset=utf8mb4', $dbUser, $dbPass);
+		}
+		catch(PDOException $ex)
+		{
+			$dbUser = "eboxpchu";
+			$dbPass = "9iPHl3cu57";
+			$dbName = "eboxpchu_justabit";
+			$db = new PDO('mysql:host=localhost;dbname='.$dbName.';charset=utf8mb4', $dbUser, $dbPass);
+		}
+		
+		$res = $db->query('SELECT * FROM termeks WHERE webmegjel = 1 ORDER BY RAND() LIMIT 1');
+		if ($res <> false)
+		{
+			while($row = $res->fetch(PDO::FETCH_ASSOC)) {
+				$cikkNev = $row['cikknev'];
+				$termekID = $row['ID'];
+				$megj = $row['megj'];
+				$id = $row['ID'];
+			}
+		}
+		
+		$res = $db->query('SELECT * FROM termekkep WHERE termekID = '.$termekID.' ORDER BY RAND() LIMIT 1');
+		if ($res <> false)
+		{
+			while($row = $res->fetch(PDO::FETCH_ASSOC)) {
+				$termekkep = $row['kepEleres'];
+			}
+		}
+		else
+		{
+			$termekkep = "images\default.jpg";
+		}
+		
+		$res = $db->query('SELECT * FROM termekAr WHERE termekID = '.$termekID.' ORDER BY RAND() LIMIT 1');
+		if ($res <> false)
+		{
+			while($row = $res->fetch(PDO::FETCH_ASSOC)) {
+				$termekar = $row['normalAr'];
+			}
+		}
+		else
+		{
+			$termekar = 0;
+		}
+		
+		return array ($cikkNev, $termekkep, $termekar, $megj, $id);
+	}
+	
+	function kategoriaLekeres()
+	{
+		$dbUser = "root";
+		$dbPass = "";
+		$dbName = "eboxbolt";
+		
+		try 
+		{
+			$db = new PDO('mysql:host=localhost;dbname='.$dbName.';charset=utf8mb4', $dbUser, $dbPass);
+		}
+		catch(PDOException $ex)
+		{
+			$dbUser = "eboxpchu";
+			$dbPass = "9iPHl3cu57";
+			$dbName = "eboxpchu_justabit";
+			$db = new PDO('mysql:host=localhost;dbname='.$dbName.';charset=utf8mb4', $dbUser, $dbPass);
+		}
+		
+		$res = $db->query('SELECT * FROM termeks WHERE webmegjel = 1 ORDER BY RAND() LIMIT 1');
+		if ($res <> false)
+		{
+			while($row = $res->fetch(PDO::FETCH_ASSOC)) {
+				$cikkNev = $row['cikknev'];
+				$termekID = $row['ID'];
+				$megj = $row['megj'];
+			}
+		}
+	}
+
+	function clean($string)
+	{
+		$string = str_replace(' ', '-', $string);
+		return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+	}
+?>

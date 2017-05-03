@@ -1,0 +1,338 @@
+<html>
+<head>
+	<title>Ebox Informatika Kft</title>
+	<link rel="stylesheet" href="styles/def.css">
+	<meta charset="UTF-8">
+</head>
+<script src="scripts/functions.js"></script>
+<body onload="currentDiv(1);">
+
+<div id="topleft">
+	<embed src="images/eboxlogo.svg" type="image/svg+xml" />
+	<div class="leftCim">
+		<a href="mailto:info@ebox-pc.hu">info@ebox-pc.hu</a>
+	</div>
+	<div class="leftTel">
+		<a href="tel:06206677131">+36 20/66-77-131</a>
+	</div>
+	<div class="search">
+		<input type="text" value="Kereső" class="searchBar">
+		<a href="#"><button class="searchButton hidden"></button></a>
+	</div>
+</div>
+
+<div id="boltMid">
+	<table>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="altCategory"><a href="#">2. kategória</a></td></tr>
+		<tr><td class="childCategory"><a href="#">3. kategória</a></td></tr>
+		<tr><td class="altCategory"><a href="#">2. kategória</a></td></tr>
+		<tr><td class="altCategory"><a href="#">2. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+		<tr><td class="mainCategory"><a href="#">1. kategória</a></td></tr>
+	</table>
+</div>
+
+<table id="boltTermekek">
+	<tr><td>
+		<div class="boltTermek">
+			<img class="hover" src="images/topRightR3_01.png" alt="">
+			<span class="boltTermekText"><span>
+				Érzékenység: 98 dB<br/>
+				Névleges impedancia: 24 Ohm<br/>
+				Frekvenciaátvitel: 12 - 22 000 Hz<br/>
+				Kábelhossz: 1.2 m<br/>
+				Szín: Fehér<br/>
+			</span></span>
+			<div class="boltTermekCim">
+				SONY MDR-X110
+			</div>
+			<div class="boltTermekAr">
+				6.990 Ft
+			</div>
+		</div>
+	</td><td>
+		<div class="boltTermek">
+			<img class="termek1img hover" src="images/topRightR3_02.png" alt="">
+			<span class="boltTermekText"><span>
+				Típus: Aktív<br/>
+				Áramellátás: USB<br/>
+				USB portok száma: 2<br/>
+				Maximális méret: 17.3"<br/>
+			</span></span>
+			<div class="boltTermekCim">
+				TRUST GXT277 LAPTOP HŰTŐ
+			</div>
+			<div class="boltTermekAr">
+				8.990 Ft
+			</div>
+		</div>
+	</td><td>
+		<div class="boltTermek">
+			<img class="termek1img hover" src="images/topRightR3_03.png" alt="">
+			<span class="boltTermekText"><span>
+				Egér típusa: Optikai</br>
+				Egér csatlakoztatása: USB</br>
+				Vezeték nélküli: Nem</br>
+			</span></span>
+			<div class="boltTermekCim">
+				APPROX APPFIRE GAMER EGÉR
+			</div>
+			<div class="boltTermekAr">
+				4.990 Ft
+			</div>
+		</div>
+	</td><td>
+		<div class="boltTermek">
+			<img class="termek1img hover" src="images/topRightR3_04.png" alt="">
+			<span class="boltTermekText"><span>
+				Multimedia billentyűzet<br/>
+				Háttérvilágítás<br/>
+			</span></span>
+			<div class="boltTermekCim">
+				TRUST GXT280 BILLENTYŰZET
+			</div>
+			<div class="boltTermekAr">
+				10.490 Ft
+			</div>
+		</div>
+	</td><td>
+	<div class="boltTermek">
+		<img class="termek1img hover" src="images/topRightR3_04.png" alt="">
+		<span class="boltTermekText"><span>
+			Multimedia billentyűzet<br/>
+			Háttérvilágítás<br/>
+		</span></span>
+		<div class="boltTermekCim">
+			TRUST GXT280 BILLENTYŰZET
+		</div>
+		<div class="boltTermekAr">
+			10.490 Ft
+		</div>
+	</div>
+	</tr><tr>
+	<td>
+		<div class="boltTermek">
+			<img class="termek1img hover" src="images/topRightR3_01.png" alt="">
+			<span class="boltTermekText"><span>
+				Érzékenység: 98 dB<br/>
+				Névleges impedancia: 24 Ohm<br/>
+				Frekvenciaátvitel: 12 - 22 000 Hz<br/>
+				Kábelhossz: 1.2 m<br/>
+				Szín: Fehér<br/>
+			</span></span>
+			<div class="boltTermekCim">
+				SONY MDR-X110
+			</div>
+			<div class="boltTermekAr">
+				6.990 Ft
+			</div>
+		</div>
+	</td><td>
+		<div class="boltTermek">
+			<img class="termek1img hover" src="images/topRightR3_01.png" alt="">
+			<span class="boltTermekText"><span>
+				Érzékenység: 98 dB<br/>
+				Névleges impedancia: 24 Ohm<br/>
+				Frekvenciaátvitel: 12 - 22 000 Hz<br/>
+				Kábelhossz: 1.2 m<br/>
+				Szín: Fehér<br/>
+			</span></span>
+			<div class="boltTermekCim">
+				SONY MDR-X110
+			</div>
+			<div class="boltTermekAr">
+				6.990 Ft
+			</div>
+		</div>
+	</td></td><td>
+		<div class="boltTermek">
+			<img class="termek1img hover" src="images/topRightR3_02.png" alt="">
+			<span class="boltTermekText"><span>
+				Típus: Aktív<br/>
+				Áramellátás: USB<br/>
+				USB portok száma: 2<br/>
+				Maximális méret: 17.3"<br/>
+			</span></span>
+			<div class="boltTermekCim">
+				TRUST GXT277 LAPTOP HŰTŐ
+			</div>
+			<div class="boltTermekAr">
+				8.990 Ft
+			</div>
+		</div>
+	</td><td>
+		<div class="boltTermek">
+			<img class="termek1img hover" src="images/topRightR3_03.png" alt="">
+			<span class="boltTermekText"><span>
+				Egér típusa: Optikai</br>
+				Egér csatlakoztatása: USB</br>
+				Vezeték nélküli: Nem</br>
+			</span></span>
+			<div class="boltTermekCim">
+				APPROX APPFIRE GAMER EGÉR
+			</div>
+			<div class="boltTermekAr">
+				4.990 Ft
+			</div>
+		</div>
+	</td><td>
+	<div class="boltTermek">
+		<img class="termek1img hover" src="images/topRightR3_04.png" alt="">
+		<span class="boltTermekText"><span>
+			Multimedia billentyűzet<br/>
+			Háttérvilágítás<br/>
+		</span></span>
+		<div class="boltTermekCim">
+			TRUST GXT280 BILLENTYŰZET
+		</div>
+		<div class="boltTermekAr">
+			10.490 Ft
+		</div>
+	</div>
+	</tr><tr><td>
+		<div class="boltTermek">
+			<img class="hover" src="images/topRightR3_01.png" alt="">
+			<span class="boltTermekText"><span>
+				Érzékenység: 98 dB<br/>
+				Névleges impedancia: 24 Ohm<br/>
+				Frekvenciaátvitel: 12 - 22 000 Hz<br/>
+				Kábelhossz: 1.2 m<br/>
+				Szín: Fehér<br/>
+			</span></span>
+			<div class="boltTermekCim">
+				SONY MDR-X110
+			</div>
+			<div class="boltTermekAr">
+				6.990 Ft
+			</div>
+		</div>
+	</td><td>
+		<div class="boltTermek">
+			<img class="termek1img hover" src="images/topRightR3_02.png" alt="">
+			<span class="boltTermekText"><span>
+				Típus: Aktív<br/>
+				Áramellátás: USB<br/>
+				USB portok száma: 2<br/>
+				Maximális méret: 17.3"<br/>
+			</span></span>
+			<div class="boltTermekCim">
+				TRUST GXT277 LAPTOP HŰTŐ
+			</div>
+			<div class="boltTermekAr">
+				8.990 Ft
+			</div>
+		</div>
+	</td><td>
+		<div class="boltTermek">
+			<img class="termek1img hover" src="images/topRightR3_03.png" alt="">
+			<span class="boltTermekText"><span>
+				Egér típusa: Optikai</br>
+				Egér csatlakoztatása: USB</br>
+				Vezeték nélküli: Nem</br>
+			</span></span>
+			<div class="boltTermekCim">
+				APPROX APPFIRE GAMER EGÉR
+			</div>
+			<div class="boltTermekAr">
+				4.990 Ft
+			</div>
+		</div>
+	</td><td>
+		<div class="boltTermek">
+			<img class="termek1img hover" src="images/topRightR3_04.png" alt="">
+			<span class="boltTermekText"><span>
+				Multimedia billentyűzet<br/>
+				Háttérvilágítás<br/>
+			</span></span>
+			<div class="boltTermekCim">
+				TRUST GXT280 BILLENTYŰZET
+			</div>
+			<div class="boltTermekAr">
+				10.490 Ft
+			</div>
+		</div>
+	</td><td>
+		<div class="boltTermek">
+			<img class="termek1img hover" src="images/topRightR3_04.png" alt="">
+			<span class="boltTermekText"><span>
+				Multimedia billentyűzet<br/>
+				Háttérvilágítás<br/>
+			</span></span>
+			<div class="boltTermekCim">
+				TRUST GXT280 BILLENTYŰZET
+			</div>
+			<div class="boltTermekAr">
+				10.490 Ft
+			</div>
+		</div>
+	</td>
+	</tr>
+</table>
+
+<div id="leftR1">
+	<table>
+	<tr><td>
+		<div id="okosotthon">
+			<img src="images/okosotthon.gif" onmouseover="this.src='images/okosotthon_hover.jpg'" onmouseout="this.src='images/okosotthon.gif'">
+			<div class="midCim">
+				Okosotthon
+			</div>
+		</div>
+	</td><td>
+		<div id="webshop">
+			<img src="images/projektor.gif" onmouseover="this.src='images/projektor_hover.jpg'" onmouseout="this.src='images/projektor.gif'" width="235">
+			<div class="midCim midCimSmall">
+				Projektor bérlés
+			</div>
+		</div>
+	</td></tr><tr><td>
+		<div id="projektor">
+			<img src="images/aboutus.gif" onmouseover="this.src='images/aboutus_hover.jpg'" onmouseout="this.src='images/aboutus.gif'" width="235">
+			<div class="midCim midCimSmall">
+				Rólunk
+			</div>
+		</div>
+	</td><td>
+		<div id="okosotthon">
+			<img src="images/okosotthon.gif" onmouseover="this.src='images/okosotthon_hover.jpg'" onmouseout="this.src='images/okosotthon.gif'">
+			<div class="midCim">
+				Okosotthon
+			</div>
+		</div>
+	</td></tr><tr><td>
+		<div id="webshop">
+			<img src="images/projektor.gif" onmouseover="this.src='images/projektor_hover.jpg'" onmouseout="this.src='images/projektor.gif'" width="235">
+			<div class="midCim midCimSmall">
+				Projektor bérlés
+			</div>
+		</div>
+	</td><td>
+		<div id="projektor">
+			<img src="images/aboutus.gif" onmouseover="this.src='images/aboutus_hover.jpg'" onmouseout="this.src='images/aboutus.gif'" width="235">
+			<div class="midCim midCimSmall">
+				Rólunk
+			</div>
+		</div>
+	</td></tr>
+	</table>
+</div>
+
+<div id="footer">
+	
+</div>
+</body>
+</html>
